@@ -15,5 +15,4 @@ def rename(_, message):
         path = reply.download(file_name=filename)
         omk.edit("Uploading.....")
         message.reply_document(path)
-        await omk.delete()
         os.remove(path)
