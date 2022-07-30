@@ -45,7 +45,3 @@ async def special_emojis(bot: Client, message: Message):
     await bot.send_dice(message.chat.id, emoji["emoji"])
 
 
-for x in special_emojis_dict:
-    command = f".{x}"
-    special_emoji_help.append([command, special_emojis_dict[x]["help"]])
-
