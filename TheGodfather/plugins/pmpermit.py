@@ -4,7 +4,7 @@ import asyncio
 from pyrogram.methods import messages
 from TheGodfather import CMD_HELP
 from TheGodfather.helpers.pyrohelper import get_arg, denied_users
-import TheGodfather.database.pmpermitdb as Zectdb
+import TheGodfather.database.pmpermitdb as db
 from config import PREFIX
 
 CMD_HELP.update(
