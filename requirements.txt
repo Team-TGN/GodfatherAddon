@@ -1,4 +1,4 @@
-pyrogram
+pyrogram==1.4.16
 tgcrypto
 aiohttp==3.6.2
 google_trans_new
