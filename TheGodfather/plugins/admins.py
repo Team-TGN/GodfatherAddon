@@ -1,91 +1,136 @@
 import time
-import asyncio
-import html
-from datetime import datetime, timedelta
 
-from pyrogram.enums import ChatMemberStatus
-from pyrogram.types import (
-    Message, 
-    ChatPermissions,
-    ChatPrivileges
-)
-
-from pyrogram.errors import (
-    UserAdminInvalid, 
-    UsernameInvalid,
-    UserNotParticipant,
-    UsernameNotOccupied,
-)
-
-from config import PREFIX
 from pyrogram import filters, Client
+from pyrogram.errors import UserAdminInvalid
+from pyrogram.types import ChatPermissions, Message
+
+from TheGodfather.helpers.PyroHelpers import GetUserMentionable
+from TheGodfather.helpers.adminHelpers import CheckAdmin, CheckReplyAdmin, RestrictFailed
+from config import PREFIX
+
+@Client.on_message(filters.command('ban', PREFIX) & filters.me)
+async def ban_hammer(bot: Client, message: Message):
+    duration = int(message.command[1]) if len(message.command) > 1 else False
+
+    if await CheckReplyAdmin(message) and await CheckAdmin(message):
+        try:
+            mention = GetUserMentionable(message.reply_to_message.from_user)
+            if duration:
+                await bot.ban_chat_member(
+                    chat_id=message.chat.id,
+                    user_id=message.reply_to_message.from_user.id,
+                    until_date=int(time.time() + (duration * 3600)),
+                )
+                await message.edit(f"{mention} has been banned for {duration} Hours.")
+            else:
+                await bot.ban_chat_member(
+                    chat_id=message.chat.id,
+                    user_id=message.reply_to_message.from_user.id,
+                )
+                await message.edit(f"{mention} has been banned indefinitely.")
+        except UserAdminInvalid:
+            await RestrictFailed(message)
 
 
+@Client.on_message(filters.command("unban", PREFIX) & filters.me)
+async def unban(bot: Client, message: Message):
+    if await CheckReplyAdmin(message) and await CheckAdmin(message):
+        try:
+            mention = GetUserMentionable(message.reply_to_message.from_user)
 
-private = ("private", "bot")
-def to_seconds(format, number): # number: int, format: s, m, h, d
-    format_set = {"s": number, "m": number*60, "h": number*60*60, "d": number*60*60*24} 
-    return int(format_set[format]) 
+            await bot.unban_chat_member(
+                chat_id=message.chat.id, user_id=message.reply_to_message.from_user.id
+            )
 
-
-
-@Client.on_message(filters.command("ban", PREFIX) & filters.me)
-async def ban_handler(app: Client, m: Message):
-    try:
-        if await app.check_private():
-            return
-
-        reply = m.reply_to_message
-        user = False
-        cmd = m.command
-        ban_time = False
-
-        if app.long() == 1 and not reply:
-            return await app.send_edit("Reply or give some id | username after command.", text_type=["mono"], delme=4)
-
-        if await app.IsAdmin("ban_users") is False:
-            return await app.send_edit("You're not an admin here or you don't have enough admin rights.", text_type=["mono"], delme=4)
-
-        if reply:
-            user = await app.get_chat_member(m.chat.id, reply.from_user.id)
-            if app.long() > 1:
-                arg = cmd[1]
-                ban_time = to_seconds(arg[-1], int(arg.replace(arg[-1], "")))
-
-        elif not reply:
-            if app.long() > 1:
-                user = await app.get_chat_member(m.chat.id, cmd[1])
-                if app.long() > 2:
-                    arg = cmd[2]
-                    ban_time = to_seconds(arg[-1], int(arg.replace(arg[-1], "")))
-
-        if user:
-            if user.user.is_self:
-                return await app.send_edit("You can't ban yourself !", text_type=["mono"], delme=4)
-            elif user.status == "administrator":
-                return await app.send_edit("How am i supposed to ban an admin ?", text_type=["mono"], delme=4)
-            elif user.status == "creator":
-                return await app.send_edit("How am i supposed to ban a creator of a group ?", text_type=["mono"], delme=4)
-        else:
-            return await app.send_edit("Something went wrong !", text_type=["mono"], delme=4)
-
-        await app.send_edit("⏳ • Hold on . . .", text_type=["mono"])
-        if ban_time:
-            await app.ban_chat_member(m.chat.id, user.user.id, datetime.now() + timedelta(ban_time))
-            await app.send_edit(f"Banned {user.user.mention} for {arg}", delme=4)
-        else:
-            await app.ban_chat_member(m.chat.id, user.user.id)
-            await app.send_edit(f"Banned {user.user.mention} in this chat.", delme=4)
-
-    except (UsernameInvalid, UsernameNotOccupied):
-        await app.send_edit("The provided username | id is invalid !", text_type=["mono"], delme=4)
-    except UserNotParticipant:
-        await app.send_edit("This user doesn't exist in this group !", text_type=["mono"], delme=4)
-    except Exception as e:
-        await app.error(e)
+            await message.edit(
+                f"Congratulations {mention} you have been unbanned."
+                " Follow the rules and be careful from now on."
+            )
+        except UserAdminInvalid:
+            await message.edit("I can't unban this user.")
 
 
+# Mute Permissions
+mute_permission = ChatPermissions(
+    can_send_messages=False,
+    can_send_media_messages=False,
+    can_send_other_messages=False,
+    can_add_web_page_previews=False,
+    can_send_polls=False,
+    can_change_info=False,
+    can_invite_users=True,
+    can_pin_messages=False,
+)
 
 
+@Client.on_message(filters.command('mute', PREFIX) & filters.me)
+async def mute_hammer(bot: Client, message: Message):
+    duration = int(message.command[1]) if len(message.command) > 1 else False
+
+    if await CheckReplyAdmin(message) and await CheckAdmin(message):
+        try:
+            mention = GetUserMentionable(message.reply_to_message.from_user)
+            if duration:
+                await bot.restrict_chat_member(
+                    chat_id=message.chat.id,
+                    user_id=message.reply_to_message.from_user.id,
+                    permissions=mute_permission,
+                    until_date=int(time.time() + (duration * 3600)),
+                )
+                await message.edit(f"{mention} has been muted for {duration} Hours.")
+            else:
+                await bot.restrict_chat_member(
+                    chat_id=message.chat.id,
+                    user_id=message.reply_to_message.from_user.id,
+                    permissions=mute_permission,
+                )
+                await message.edit(f"{mention} has been muted indefinitely.")
+        except UserAdminInvalid:
+            await RestrictFailed(message)
 
 
+# Unmute permissions
+unmute_permissions = ChatPermissions(
+    can_send_messages=True,
+    can_send_media_messages=True,
+    can_send_other_messages=True,
+    can_add_web_page_previews=True,
+    can_send_polls=True,
+    can_change_info=False,
+    can_invite_users=True,
+    can_pin_messages=False,
+)
+
+
+@Client.on_message(filters.command("unmute", PREFIX) & filters.me)
+async def unmute(bot: Client, message: Message):
+    if await CheckReplyAdmin(message) and await CheckAdmin(message):
+        try:
+            mention = GetUserMentionable(message.reply_to_message.from_user)
+
+            await bot.restrict_chat_member(
+                chat_id=message.chat.id,
+                user_id=message.reply_to_message.from_user.id,
+                permissions=unmute_permissions,
+            )
+
+            await message.edit(f"{mention}, you may send messages here now.")
+        except UserAdminInvalid:
+            await RestrictFailed(message)
+
+
+@Client.on_message(filters.command("kick", PREFIX) & filters.me)
+async def kick_user(bot: Client, message: Message):
+    if await CheckReplyAdmin(message) and await CheckAdmin(message):
+        try:
+            mention = GetUserMentionable(message.reply_to_message.from_user)
+
+            await bot.ban_chat_member(
+                chat_id=message.chat.id,
+                user_id=message.reply_to_message.from_user.id,
+                until_date=int(time.time() + (int(time.time()) * 3600)),
+            )
+
+            await message.edit(f"Goodbye, {mention}.")
+        except UserAdminInvalid:
+            await RestrictFailed(message)
