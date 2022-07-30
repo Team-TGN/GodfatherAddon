@@ -76,7 +76,16 @@ async def alive(app: Client, m):
 @Client.on_message(filters.command("ping", PREFIX) & filters.me)
 async def pingme(app: Client, message: Message):
     start = datetime.now()
-    await message.edit("`Pong!`")
     end = datetime.now()
     m_s = (end - start).microseconds / 1000
-    await message.edit_photo(photo="https://telegra.ph/file/2fe4d8d775c1aaf5519a2.jpg", caption=f"**Pong!**\n`{m_s} ms`")
+    photo = "https://telegra.ph/file/ceb9430fcb275c4f2a0d3.jpg"
+    if message.reply_to_message:
+        await app.send_photo(
+            message.chat.id,
+            photo,
+            caption=f"**Pong!**\n`{m_s} ms`",
+            reply_to_message_id=message.reply_to_message.message_id,
+        )
+    else:
+        await app.send_photo(message.chat.id, photo, caption=f"**Pong!**\n`{m_s} ms`")
+
