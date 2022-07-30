@@ -1,5 +1,6 @@
 {
   "name": "Godfather",
+  "logo": "https://telegra.ph/file/2fe4d8d775c1aaf5519a2.jpg",
   "description": "Godfather, a telegram userbot with MongoDB database Based on pyrogram",
   "env": {
     "API_ID": {
