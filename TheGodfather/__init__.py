@@ -20,6 +20,6 @@ CMD_HELP = {}
 StartTime = time.time()
 
 if SESSION:
-   app = Client(SESSION, api_id = API_ID, api_hash = API_HASH , plugins=dict(root="TheGodfather.plugins"))
+   app = Client(name="SESSION", api_id = API_ID, api_hash = API_HASH, session_string=SESSION, plugins=dict(root="TheGodfather.plugins"))
 else:
    app = None
