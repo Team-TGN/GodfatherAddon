@@ -1,301 +1,91 @@
-"""Just A Admin plugins for promote/demote/kick etcs"""
 import time
 import asyncio
-from pyrogram import filters, Client
-from pyrogram.types import Message, ChatPermissions
+import html
+from datetime import datetime, timedelta
 
-from pyrogram.errors import UserAdminInvalid
-from pyrogram.methods.chats.get_chat_members import GetChatMembers as ChatMemberFilters
-
-from TheGodfather import CMD_HELP, LOGGER
-from TheGodfather.helpers.pyrohelper import get_arg, get_args
-from TheGodfather.helpers.adminhelpers import CheckAdmin
-from config import PREFIX
-
-CMD_HELP.update(
-    {
-        "Admin Tools": """
-『 **Admin Tools** 』
-  `ban` -> Bans user indefinitely.
-  `unban` -> Unbans the user.
-  `promote` [optional title] -> Promotes a user.
-  `demote` _> Demotes a user.
-  `mute` -> Mutes user indefinitely.
-  `unmute` -> Unmutes the user.
-  `kick` -> Kicks the user out of the group.
-  `gmute` -> Doesn't lets a user speak(even admins).
-  `ungmute` -> Inverse of what gmute does.
-  `pin` -> pins a message.
-  `del` -> delete a message.
-  `purge` -> purge message(s)
-  `invite` -> add user to chat.
-"""
-    }
+from pyrogram.enums import ChatMemberStatus
+from pyrogram.types import (
+    Message, 
+    ChatPermissions,
+    ChatPrivileges
 )
+
+from pyrogram.errors import (
+    UserAdminInvalid, 
+    UsernameInvalid,
+    UserNotParticipant,
+    UsernameNotOccupied,
+)
+
+from config import PREFIX
+from pyrogram import filters, Client
+
+
+
+private = ("private", "bot")
+def to_seconds(format, number): # number: int, format: s, m, h, d
+    format_set = {"s": number, "m": number*60, "h": number*60*60, "d": number*60*60*24} 
+    return int(format_set[format]) 
+
 
 
 @Client.on_message(filters.command("ban", PREFIX) & filters.me)
-async def ban_hammer(app: Client, message: Message):
-    if await CheckAdmin(message) is True:
-        reply = message.reply_to_message
-        if reply:
-            user = reply.from_user["id"]
-        else:
-            user = get_arg(message)
-            if not user:
-                await message.edit("**I can't ban no-one, can I?**")
-                return
-        try:
-            get_user = await app.get_users(user)
-            await app.ban_chat_member(
-                chat_id=message.chat.id,
-                user_id=get_user.id,
-            )
-            await message.edit(f"**Banned {get_user.first_name} from the chat.**")
-        except:
-            await message.edit("**I can't ban this user.**")
-    else:
-        await message.edit("**Am I an admin here?**")
-
-
-@Client.on_message(filters.command("unban", PREFIX) & filters.me)
-async def unban(app: Client, message: Message):
-    if await CheckAdmin(message) is True:
-        reply = message.reply_to_message
-        if reply:
-            user = reply.from_user["id"]
-        else:
-            user = get_arg(message)
-            if not user:
-                await message.edit("**I need someone to be unbanned here.**")
-                return
-        try:
-            get_user = await app.get_users(user)
-            await app.unban_chat_member(chat_id=message.chat.id, user_id=get_user.id)
-            await message.edit(f"**Unbanned {get_user.first_name} from the chat.**")
-        except:
-            await message.edit("**I can't unban this user.**")
-    else:
-        await message.edit("**Am I an admin here?**")
-
-
-# Mute Permissions
-mute_permission = ChatPermissions(
-    can_send_messages=False,
-    can_send_media_messages=False, 
-    can_send_other_messages=False,
-    can_send_polls=False,
-    can_add_web_page_previews=False,
-    can_change_info=False,
-    can_pin_messages=False,
-    can_invite_users=True,
-)
-
-@Client.on_message(filters.command("mute", PREFIX) & filters.me)
-async def mute_hammer(app: Client, message: Message):
-    if await CheckAdmin(message) is True:
-        reply = message.reply_to_message
-        if reply:
-            user = reply.from_user["id"]
-        else:
-            user = get_arg(message)
-            if not user:
-                await message.edit("**I can't mute no-one, can I?**")
-                return
-        try:
-            get_user = await app.get_users(user)
-            await app.restrict_chat_member(
-                chat_id=message.chat.id,
-                user_id=get_user.id,
-                permissions=mute_permission,
-            )
-            await message.edit(f"**{get_user.first_name} has been muted.**")
-        except:
-            await message.edit("**I can't mute this user.**")
-    else:
-        await message.edit("**Am I an admin here?**")
-
-
-# Unmute permissions
-unmute_permissions = ChatPermissions(
-    can_send_messages=True,
-    can_send_media_messages=True,
-    can_send_polls=True,
-    can_change_info=False,
-    can_invite_users=True,
-    can_pin_messages=False,
-)
-
-@Client.on_message(filters.command("unmute", PREFIX) & filters.me)
-async def unmute(app: Client, message: Message):
-    if await CheckAdmin(message) is True:
-        reply = message.reply_to_message
-        if reply:
-            user = reply.from_user["id"]
-        else:
-            user = get_arg(message)
-            if not user:
-                await message.edit("**Whome should I unmute?**")
-                return
-        try:
-            get_user = await app.get_users(user)
-            await app.restrict_chat_member(
-                chat_id=message.chat.id,
-                user_id=get_user.id,
-                permissions=unmute_permissions,
-            )
-            await message.edit(f"**{get_user.first_name} was unmuted.**")
-        except:
-            await message.edit("**I can't unmute this user.**")
-    else:
-        await message.edit("**Am I an admin here?**")
-
-
-@Client.on_message(filters.command("kick", PREFIX) & filters.me)
-async def kick_user(app: Client, message: Message):
-    if await CheckAdmin(message) is True:
-        reply = message.reply_to_message
-        if reply:
-            user = reply.from_user["id"]
-        else:
-            user = get_arg(message)
-            if not user:
-                await message.edit("**Whome should I kick?**")
-                return
-        try:
-            get_user = await app.get_users(user)
-            await app.kick_chat_member(
-                chat_id=message.chat.id,
-                user_id=get_user.id,
-            )
-            await message.edit(f"**Kicked {get_user.first_name} from the chat.**")
-        except:
-            await message.edit("**I can't kick this user.**")
-    else:
-        await message.edit("**Am I an admin here?**")
-
-
-@Client.on_message(filters.command("pin", PREFIX) & filters.me)
-async def pin_message(app: Client, message: Message):
-    if message.chat.type in ["group", "supergroup"]:
-        # Here lies the sanity checks
-        admins = await app.get_chat_members(
-            message.chat.id, filter=ChatMemberFilters.ADMINISTRATORS
-        )
-        admin_ids = [user.user.id for user in admins]
-        me = await app.get_me()
-
-        if me.id in admin_ids:
-            # If you replied to a message so that we can pin it.
-            if message.reply_to_message:
-                disable_notification = True
-
-                if len(message.command) >= 2 and message.command[1] in [
-                    "alert",
-                    "notify",
-                    "loud",
-                ]:
-                    disable_notification = False
-
-                await app.pin_chat_message(
-                    message.chat.id,
-                    message.reply_to_message.message_id,
-                    disable_notification=disable_notification,
-                )
-                await message.edit("`Pinned message!`")
-            else:
-                await message.edit(
-                    "`Reply to a message so that I can pin the god damned thing...`"
-                )
-        else:
-            await message.edit("`I am not an admin here lmao. What am I doing?`")
-    else:
-        await message.edit("`This is not a place where I can pin shit.`")
-    await asyncio.sleep(3)
-    await message.delete()
-
-
-@Client.on_message(filters.command("promote", PREFIX) & filters.me)
-async def promote(app: Client, message: Message):
-    if await CheckAdmin(message) is False:
-        await message.edit("**Am I an admin here?.**")
-        return
-    title = "Admin"
-    reply = message.reply_to_message
-    if reply:
-        user = reply.from_user["id"]
-        title = str(get_arg(message))
-    else:
-        args = get_args(message)
-        if not args:
-            await message.edit("**I can't promote no-one, can I?**")
-            return
-        user = args[0]
-        if len(args) > 1:
-            title = " ".join(args[1:])
-    get_user = await app.get_users(user)
+async def ban_handler(app: Client, m: Message):
     try:
-        await app.promote_chat_member(message.chat.id, user, can_pin_messages=True)
-        await message.edit(
-            f"**{get_user.first_name} is now powered with admin rights with {title} as title!**"
-        )
-    except Exception as e:
-        await message.edit(f"{e}")
-    if title:
-        try:
-            await app.set_administrator_title(message.chat.id, user, title)
-        except:
-            pass
-
-
-@Client.on_message(filters.command("demote", PREFIX) & filters.me)
-async def demote(app: Client, message: Message):
-    if await CheckAdmin(message) is False:
-        await message.edit("**I am not admin.**")
-        return
-    reply = message.reply_to_message
-    if reply:
-        user = reply.from_user["id"]
-    else:
-        user = get_arg(message)
-        if not user:
-            await message.edit("**I can't demote no-one, can I?**")
+        if await app.check_private():
             return
-    get_user = await app.get_users(user)
-    try:
-        await app.promote_chat_member(
-            message.chat.id,
-            user,
-            is_anonymous=False,
-            can_change_info=False,
-            can_delete_messages=False,
-            can_edit_messages=False,
-            can_invite_users=False,
-            can_promote_members=False,
-            can_restrict_members=False,
-            can_pin_messages=False,
-            can_post_messages=False,
-        )
-        await message.edit(
-            f"**{get_user.first_name} is now stripped off of their admin rights!**"
-        )
+
+        reply = m.reply_to_message
+        user = False
+        cmd = m.command
+        ban_time = False
+
+        if app.long() == 1 and not reply:
+            return await app.send_edit("Reply or give some id | username after command.", text_type=["mono"], delme=4)
+
+        if await app.IsAdmin("ban_users") is False:
+            return await app.send_edit("You're not an admin here or you don't have enough admin rights.", text_type=["mono"], delme=4)
+
+        if reply:
+            user = await app.get_chat_member(m.chat.id, reply.from_user.id)
+            if app.long() > 1:
+                arg = cmd[1]
+                ban_time = to_seconds(arg[-1], int(arg.replace(arg[-1], "")))
+
+        elif not reply:
+            if app.long() > 1:
+                user = await app.get_chat_member(m.chat.id, cmd[1])
+                if app.long() > 2:
+                    arg = cmd[2]
+                    ban_time = to_seconds(arg[-1], int(arg.replace(arg[-1], "")))
+
+        if user:
+            if user.user.is_self:
+                return await app.send_edit("You can't ban yourself !", text_type=["mono"], delme=4)
+            elif user.status == "administrator":
+                return await app.send_edit("How am i supposed to ban an admin ?", text_type=["mono"], delme=4)
+            elif user.status == "creator":
+                return await app.send_edit("How am i supposed to ban a creator of a group ?", text_type=["mono"], delme=4)
+        else:
+            return await app.send_edit("Something went wrong !", text_type=["mono"], delme=4)
+
+        await app.send_edit("⏳ • Hold on . . .", text_type=["mono"])
+        if ban_time:
+            await app.ban_chat_member(m.chat.id, user.user.id, datetime.now() + timedelta(ban_time))
+            await app.send_edit(f"Banned {user.user.mention} for {arg}", delme=4)
+        else:
+            await app.ban_chat_member(m.chat.id, user.user.id)
+            await app.send_edit(f"Banned {user.user.mention} in this chat.", delme=4)
+
+    except (UsernameInvalid, UsernameNotOccupied):
+        await app.send_edit("The provided username | id is invalid !", text_type=["mono"], delme=4)
+    except UserNotParticipant:
+        await app.send_edit("This user doesn't exist in this group !", text_type=["mono"], delme=4)
     except Exception as e:
-        await message.edit(f"{e}")
+        await app.error(e)
 
 
-@Client.on_message(filters.command("invite", PREFIX) & filters.me & ~filters.private)
-async def invite(app: Client, message):
-    reply = message.reply_to_message
-    if reply:
-        user = reply.from_user["id"]
-    else:
-        user = get_arg(message)
-        if not user:
-            await message.edit("**I can't invite no-one, can I?**")
-            return
-    get_user = await app.get_users(user)
-    try:
-        await app.add_chat_members(message.chat.id, get_user.id)
-        await message.edit(f"**Added {get_user.first_name} to the chat!**")
-    except Exception as e:
-        await message.edit(f"{e}")
+
+
+
+
