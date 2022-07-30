@@ -74,7 +74,7 @@ async def s_filters(client, message):
 
 
 @Client.on_message(
-    filters.incoming & ~filters.edited & filters.group & ~filters.private & ~filters.me,
+    filters.incoming & filters.group & ~filters.private & ~filters.me,
     group=3,
 )
 async def filter_s(client, message):

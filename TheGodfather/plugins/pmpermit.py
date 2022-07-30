@@ -25,7 +25,7 @@ FLOOD_CTRL = 0
 ALLOWED = []
 USERS_AND_WARNS = {}
 
-
+"""
 @Client.on_message(filters.command("pmguard", PREFIX) & filters.me)
 async def pmguard(app: Client, message):
     arg = get_arg(message)
@@ -39,7 +39,7 @@ async def pmguard(app: Client, message):
         await db.set_pm(True)
         await message.edit("**PM Guard Activated**")
 
-
+"""
 @Client.on_message(filters.command("setlimit", PREFIX) & filters.me)
 async def pmguard(app: Client, message):
     arg = get_arg(message)
@@ -49,7 +49,7 @@ async def pmguard(app: Client, message):
     await db.set_limit(int(arg))
     await message.edit(f"**Limit set to {arg}**")
 
-
+"""
 @Client.on_message(filters.command("setpmmsg", PREFIX) & filters.me)
 async def setpmmsg(app: Client, message):
     arg = get_arg(message)
@@ -62,7 +62,7 @@ async def setpmmsg(app: Client, message):
         return
     await db.set_permit_message(f"`{arg}`")
     await message.edit("**Custom anti-pm message set**")
-
+"""
 
 @Client.on_message(filters.command("setblockmsg", PREFIX) & filters.me)
 async def setpmmsg(app: Client, message):
@@ -77,7 +77,7 @@ async def setpmmsg(app: Client, message):
     await db.set_block_message(f"`{arg}`")
     await message.edit("**Custom block message set**")
 
-
+"""
 @Client.on_message(filters.command("allow", PREFIX) & filters.me & filters.private)
 async def allow(app: Client, message):
     chat_id = message.chat.id
@@ -89,7 +89,7 @@ async def allow(app: Client, message):
     ):
         await message.delete()
     USERS_AND_WARNS.update({chat_id: 0})
-
+"""
 
 @Client.on_message(filters.command("deny", PREFIX) & filters.me & filters.private)
 async def deny(app: Client, message):
