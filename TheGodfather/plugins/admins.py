@@ -47,7 +47,7 @@ async def ban_hammer(app: Client, message: Message):
                 return
         try:
             get_user = await app.get_users(user)
-            await app.kick_chat_member(
+            await app.ban_chat_member(
                 chat_id=message.chat.id,
                 user_id=get_user.id,
             )
