@@ -79,4 +79,4 @@ async def pingme(app: Client, message: Message):
     await message.edit("`Pong!`")
     end = datetime.now()
     m_s = (end - start).microseconds / 1000
-    await message.edit(f"**Pong!**\n`{m_s} ms`")
+    await message.edit_photo(photo="https://telegra.ph/file/2fe4d8d775c1aaf5519a2.jpg", caption=f"**Pong!**\n`{m_s} ms`")
