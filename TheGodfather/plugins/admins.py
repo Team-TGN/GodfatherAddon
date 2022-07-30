@@ -5,7 +5,7 @@ from pyrogram import filters, Client
 from pyrogram.types import Message, ChatPermissions
 
 from pyrogram.errors import UserAdminInvalid
-from pyrogram.methods.chats.get_chat_members import Filters as ChatMemberFilters
+from pyrogram.methods.chats.get_chat_members import GetChatMembers as ChatMemberFilters
 
 from TheGodfather import CMD_HELP, LOGGER
 from TheGodfather.helpers.pyrohelper import get_arg, get_args
