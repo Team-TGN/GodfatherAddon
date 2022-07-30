@@ -38,7 +38,6 @@ async def setpmmsg(app: Client, message):
 @Client.on_message(filters.command(["allow", "ap", "approve", "a"], ["."]) & filters.me & filters.private)
 async def allow(app: Client, message):
     chat_id = message.chat.id
-    pmpermit, pm_message, limit, block_message = await db.get_pm_settings()
     await db.allow_user(chat_id)
     await message.edit(f"**I have allowed [you](tg://user?id={chat_id}) to PM me.**")
     async for message in app.search_messages(
