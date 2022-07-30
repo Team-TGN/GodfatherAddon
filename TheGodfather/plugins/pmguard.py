@@ -35,7 +35,7 @@ async def setpmmsg(app: Client, message):
     await db.set_permit_message(f"`{arg}`")
     await message.edit("**Custom anti-pm message set**")
 
-@Client.on_message(filters.command("allow", PREFIX) & filters.me & filters.private)
+@Client.on_message(filters.command(["allow", "ap", "approve", "a"], ["."]) & filters.me & filters.private)
 async def allow(app: Client, message):
     chat_id = message.chat.id
     pmpermit, pm_message, limit, block_message = await db.get_pm_settings()
@@ -46,4 +46,3 @@ async def allow(app: Client, message):
     ):
         await message.delete()
     USERS_AND_WARNS.update({chat_id: 0})
-
