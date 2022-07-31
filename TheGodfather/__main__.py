@@ -19,13 +19,13 @@ HELPABLE = {}
 
 async def initiate_bot():
         if app:
-           app.start()
+           await app.start()
            print("Client 1 Has been Started 📂")
         else:
            print("Plz add atleast 1 SESSION")
         if bot:
            print("Booting Your Botfather Bot Token 📂")
-           bot.start()
+           await bot.start()
         else:
            print("BOT_TOKEN has been not found Plz Add first")
         for all_module in ALL_MODULES:
@@ -47,26 +47,8 @@ async def initiate_bot():
         try:
             await app.join_chat("TheGodfatherChat")
             await app.join_chat("GodfatherUserBot")
-        except:
+        except Exception as e:
             pass
-        try:
-            await app.send_message(
-                LOG_CHAT,
-                "<b>Heya Your Userbot Has been Started ✨</b>",
-            )
-        except Exception as e:
-            print(
-                "\nUserBot Account Has Failed To Access The Log Group.❗"
-            )
-        try:
-            await bot.send_message(
-                LOG_CHAT,
-                "<b>🥀 Your Userbot/ Assistant Has been Started Successfully ✨</b>",
-            )
-        except Exception as e:
-            print(
-                "\nAssistant Bot Has Failed To Access The Log Group.\nPlz Add Your Assistant Bot To Your Log Group"
-            )
 
 
 
