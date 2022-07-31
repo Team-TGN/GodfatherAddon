@@ -11,6 +11,7 @@ try:
    app.start()
    me = app.get_me()
    app.join_chat("@TheGodfatherChat")
+   app.join_chat("@GodfatherUserBot")
    print(f"UserBot started for user {me.id}. Type {PREFIX}help in any telegram chat.")
 except:
    pass
