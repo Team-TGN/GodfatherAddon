@@ -7,7 +7,6 @@ from pyrogram import idle, Client, filters
 from config import PREFIX
 from TheGodfather import app, LOGGER, bot
 import logging
-from TheGodfather.plugins import *
 from rich.console import Console
 from rich.table import Table
 from TheGodfather.plugins import ALL_MODULES
