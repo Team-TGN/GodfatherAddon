@@ -1,5 +1,6 @@
 import asyncio
 from functools import partial
+from config import PREFIX
 
 from pyrogram import filters, Client
 from pyrogram.types import Message
@@ -10,7 +11,7 @@ mention = partial("<a href='tg://user?id={}'>{}</a>".format)
 hmention = partial("<a href='tg://user?id={}'>\u200B</a>{}".format)
 
 
-@Client.on_message(filters.command("mention", ".") & filters.me)
+@Client.on_message(filters.command("mention", PREFIX) & filters.me)
 async def mention_user(bot: Client, message: Message):
     if len(message.command) < 3:
         await message.edit("Incorrect format\nExample: .mention @Athfan CTO")
@@ -29,7 +30,7 @@ async def mention_user(bot: Client, message: Message):
     await message.edit(_mention)
 
 
-@Client.on_message(filters.command("hmention", ".") & filters.me)
+@Client.on_message(filters.command("hmention", PREFIX) & filters.me)
 async def hidden_mention(bot: Client, message: Message):
     if len(message.command) < 3:
         await message.edit("Incorrect format\nExample: .hmention @Athfan")
