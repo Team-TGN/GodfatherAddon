@@ -8,6 +8,7 @@ from config import PREFIX
 from TheGodfather import app, LOGGER, bot
 import logging
 from rich.console import Console
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from rich.table import Table
 from TheGodfather.plugins import ALL_MODULES
 from config import LOG_CHAT
