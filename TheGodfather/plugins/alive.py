@@ -55,11 +55,14 @@ def get_readable_time(seconds: int) -> str:
 async def alive(app: Client, m):
     start_time = time.time()
     uptime = get_readable_time((time.time() - StartTime))
-    reply_msg = f"**[Godfather](https://github.com/Team-Tgn/Godfather)**\n"
-    reply_msg += f"__Python__: `{__python_version__}`\n"
-    reply_msg += f"__@Pyrogram vr__: `{__pyro_version__}`\n"
     end_time = time.time()
-    reply_msg += f"__Uptime__: {uptime}"
+    reply_msg = f"**Hey! I'm Still Alive!**\n"
+    reply_msg += f"Python Version: `{__python_version__}`\n"
+    reply_msg += f"Pyrogram Version: `{__pyro_version__}`\n"
+    reply_msg += f"Uptime: {uptime}"
+    reply_msg += "Support: [Click](https://t.me/TheGodfatherChat)"
+    reply_msg += "Channel: [Click](https://t.me/GodfatherUserBot)"
+    reply_msg += "[Powered By Godfather](https://github.com/Team-TGN/Godfather)"
     photo = "https://telegra.ph/file/2c564b0cd45f8e39ef7e2.jpg"
     await m.delete()
     if m.reply_to_message:
