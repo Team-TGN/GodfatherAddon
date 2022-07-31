@@ -11,6 +11,7 @@ from TheGodfather.plugins import *
 from rich.console import Console
 from rich.table import Table
 from TheGodfather.plugins import ALL_MODULES
+from config import LOG_CHAT
 
 loop = asyncio.get_event_loop()
 console = Console()
