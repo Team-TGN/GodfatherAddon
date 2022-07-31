@@ -90,6 +90,7 @@ Click On The Button Below ✨...**
         ),
         keyboard,
     )
+home_text_pm = "Hey!"
 
 @bot.on_callback_query(filters.regex("close"))
 async def close(_, CallbackQuery):
@@ -140,7 +141,7 @@ Click On The Button Below ✨...**
         )
     elif home_match:
         out = private_panel()
-        await robot.send_message(
+        await bot.send_message(
             query.from_user.id,
             text=home_text_pm,
             reply_markup=InlineKeyboardMarkup(out[1]),
