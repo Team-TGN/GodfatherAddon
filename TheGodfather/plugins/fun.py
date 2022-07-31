@@ -44,4 +44,14 @@ async def special_emojis(bot: Client, message: Message):
     await message.delete()
     await bot.send_dice(message.chat.id, emoji["emoji"])
 
+__MODULE__ = "Fun"
+__HELP__ = f"""
+**📂 This module just for fun/ Animation.**
+`.moon` - **Moon animation**
+`.clock` - **Clock Animation**
+`.thunder` - **Thunder⚡ Animation**
+`.earth` - **Earth Animation**
+`.heart` - **Heart Animation**
+"""
+
 
