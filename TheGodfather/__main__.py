@@ -72,7 +72,7 @@ async def initiate_bot():
 
 
 @bot.on_message(filters.command("start"))
-async def alive(app: bot, m):
+async def alive(client: bot, m):
     start_time = time.time()
     uptime = get_readable_time((time.time() - StartTime))
     end_time = time.time()
@@ -84,14 +84,14 @@ async def alive(app: bot, m):
     photo = "https://telegra.ph/file/2c564b0cd45f8e39ef7e2.jpg"
     await m.delete()
     if m.reply_to_message:
-        await app.send_photo(
+        await client.send_photo(
             m.chat.id,
             photo,
             caption=reply_msg,
             reply_to_message_id=m.reply_to_message.message_id,
         )
     else:
-        await app.send_photo(m.chat.id, photo, caption=reply_msg)
+        await client.send_photo(m.chat.id, photo, caption=reply_msg)
 
 @bot.on_message(command(["help"]) & SUDOERS)
 async def help_command(_, message):
