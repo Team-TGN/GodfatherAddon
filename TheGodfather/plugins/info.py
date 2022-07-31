@@ -5,7 +5,7 @@ from pyrogram import filters, Client
 from pyrogram.errors import PeerIdInvalid
 from pyrogram.raw import functions
 from pyrogram.types import Message, User
-
+from config import PREFIX
 from TheGodfather.helpers.PyroHelpers import ReplyCheck
 
 
