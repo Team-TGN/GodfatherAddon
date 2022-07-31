@@ -74,7 +74,7 @@ async def alive(client: bot, m):
 @bot.on_message(filters.command(["help"]))
 async def help_command(_, message):
     text, keyboard = await help_parser(message.from_user.mention)
-    await bot.send_message(LOG_CHAT, text, reply_markup=keyboard)
+    await message.reply_text(text, reply_markup=keyboard)
 
 
 
