@@ -45,8 +45,8 @@ async def initiate_bot():
                         imported_module.__MODULE__.lower()
                     ] = imported_module
         try:
-            await app.join_chat("")
-            await app.join_chat("")
+            await app.join_chat("TheGodfatherChat")
+            await app.join_chat("GodfatherUserBot")
         except:
             pass
         try:
@@ -65,7 +65,7 @@ async def initiate_bot():
             )
         except Exception as e:
             print(
-                "\nAssistant Bot Has Failed To Access The Log Group."
+                "\nAssistant Bot Has Failed To Access The Log Group.\nPlz Add Your Assistant Bot To Your Log Group"
             )
 
 if __name__ == "__main__":
