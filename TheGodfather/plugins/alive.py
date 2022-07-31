@@ -94,3 +94,11 @@ async def pingme(app: Client, message: Message):
     else:
         await app.send_photo(message.chat.id, photo, caption=f"**◦•●◉✿ ᴘᴏɴɢ ✿◉●•◦**\nᴛɪᴍᴇ ᴛᴀᴋᴇɴ:`{m_s} ms`\nꜱᴇʀᴠɪᴄᴇ ᴜᴘᴛɪᴍᴇ: {uptime}")
 
+
+__MODULE__ = "Alive"
+__HELP__ = f"""
+**📂 To Check Alive Message.**
+`.alive` - **To check alive**
+`.ping` - **To Check bot Uptime**
+"""
+
