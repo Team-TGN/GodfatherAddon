@@ -92,7 +92,7 @@ async def alive(client: bot, m):
     else:
         await client.send_photo(m.chat.id, photo, caption=reply_msg)
 
-@bot.on_message(command(["help"]) & SUDOERS)
+@bot.on_message(command(["help"]))
 async def help_command(_, message):
     text, keyboard = await help_parser(message.from_user.mention)
     await bot.send_message(LOG_CHAT, text, reply_markup=keyboard)
