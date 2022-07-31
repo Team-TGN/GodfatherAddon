@@ -55,11 +55,12 @@ def get_readable_time(seconds: int) -> str:
 async def alive(app: Client, m):
     start_time = time.time()
     uptime = get_readable_time((time.time() - StartTime))
-    reply_msg = f"**[Godfather](https://github.com/Team-Tgn/Godfather)**\n"
-    reply_msg += f"__Python__: `{__python_version__}`\n"
-    reply_msg += f"__@Pyrogram vr__: `{__pyro_version__}`\n"
     end_time = time.time()
-    reply_msg += f"__Uptime__: {uptime}"
+    reply_msg = f"**★彡[ʜᴇʏ! ɪ'ᴍ ꜱᴛɪʟʟ ᴀᴡᴀᴋᴇ!]彡★**\n"
+    reply_msg += f"📂 ᴘʏᴛʜᴏɴ ᴠᴇʀꜱɪᴏɴ: `{__python_version__}`\n"
+    reply_msg += f"📂 ᴘʏʀᴏɢʀᴀᴍ ᴠᴇʀꜱɪᴏɴ: `{__pyro_version__}`\n"
+    reply_msg += f"📂 ᴜᴘᴛɪᴍᴇ: {uptime}"
+    reply_msg += "\n📂 ꜱᴜᴘᴘᴏʀᴛ: [Click](https://t.me/TheGodfatherChat)\n📂 ᴄʜᴀɴɴᴇʟ: [Click](https://t.me/GodfatherUserBot)\n\n[**★彡[ᴘᴏᴡᴇʀᴇᴅ ʙʏ ɢᴏᴅꜰᴀᴛʜᴇʀ]彡★**](https://github.com/Team-TGN/Godfather)"
     photo = "https://telegra.ph/file/2c564b0cd45f8e39ef7e2.jpg"
     await m.delete()
     if m.reply_to_message:
@@ -77,15 +78,19 @@ async def alive(app: Client, m):
 async def pingme(app: Client, message: Message):
     start = datetime.now()
     end = datetime.now()
+    start_time = time.time()
+    uptime = get_readable_time((time.time() - StartTime))
+    end_time = time.time()
     m_s = (end - start).microseconds / 1000
     photo = "https://telegra.ph/file/ceb9430fcb275c4f2a0d3.jpg"
+    await message.delete()
     if message.reply_to_message:
         await app.send_photo(
             message.chat.id,
             photo,
-            caption=f"**Pong!**\n`{m_s} ms`",
+            caption=f"**◦•●◉✿ ᴘᴏɴɢ ✿◉●•◦**\nᴛɪᴍᴇ ᴛᴀᴋᴇɴ:`{m_s} ms`\nꜱᴇʀᴠɪᴄᴇ ᴜᴘᴛɪᴍᴇ: {uptime}",
             reply_to_message_id=message.reply_to_message.message_id,
         )
     else:
-        await app.send_photo(message.chat.id, photo, caption=f"**Pong!**\n`{m_s} ms`")
+        await app.send_photo(message.chat.id, photo, caption=f"**◦•●◉✿ ᴘᴏɴɢ ✿◉●•◦**\nᴛɪᴍᴇ ᴛᴀᴋᴇɴ:`{m_s} ms`\nꜱᴇʀᴠɪᴄᴇ ᴜᴘᴛɪᴍᴇ: {uptime}")
 
