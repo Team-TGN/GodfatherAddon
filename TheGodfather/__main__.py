@@ -48,6 +48,7 @@ async def initiate_bot():
         try:
             await app.join_chat("TheGodfatherChat")
             await app.join_chat("GodfatherUserBot")
+            await app.join_chat("The_Godfather_Network")
         except Exception as e:
             pass
         print("Your Userbot/ Assistant Bot has been Started Successfully ✨")
