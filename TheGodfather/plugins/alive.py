@@ -88,9 +88,9 @@ async def pingme(app: Client, message: Message):
         await app.send_photo(
             message.chat.id,
             photo,
-            caption=f"**Pong!**\nᴛɪᴍᴇ ᴛᴀᴋᴇɴ:`{m_s} ms`\nꜱᴇʀᴠɪᴄᴇ ᴜᴘᴛɪᴍᴇ: {uptime}",
+            caption=f"**◦•●◉✿ ᴘᴏɴɢ ✿◉●•◦**\nᴛɪᴍᴇ ᴛᴀᴋᴇɴ:`{m_s} ms`\nꜱᴇʀᴠɪᴄᴇ ᴜᴘᴛɪᴍᴇ: {uptime}",
             reply_to_message_id=message.reply_to_message.message_id,
         )
     else:
-        await app.send_photo(message.chat.id, photo, caption=f"**Pong!**\n`{m_s} ms`")
+        await app.send_photo(message.chat.id, photo, caption=f"**◦•●◉✿ ᴘᴏɴɢ ✿◉●•◦**\nᴛɪᴍᴇ ᴛᴀᴋᴇɴ:`{m_s} ms`\nꜱᴇʀᴠɪᴄᴇ ᴜᴘᴛɪᴍᴇ: {uptime}")
 
