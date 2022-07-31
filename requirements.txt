@@ -11,3 +11,4 @@ pillow
 GitPython
 heroku3
 rich
+aiofiles
