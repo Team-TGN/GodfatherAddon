@@ -49,18 +49,14 @@ async def initiate_bot():
             await app.join_chat("GodfatherUserBot")
         except Exception as e:
             pass
+        print("Your Userbot/ Assistant Bot has been Started Successfully ✨")
+        await idle()
 
 
 
 @bot.on_message(filters.command("start"))
 async def alive(client: bot, m):
-    start_time = time.time()
-    uptime = get_readable_time((time.time() - StartTime))
-    end_time = time.time()
     reply_msg = f"**★彡[ʜᴇʏ! ɪ'ᴍ ꜱᴛɪʟʟ ᴀᴡᴀᴋᴇ!]彡★**\n"
-    reply_msg += f"📂 ᴘʏᴛʜᴏɴ ᴠᴇʀꜱɪᴏɴ: `{__python_version__}`\n"
-    reply_msg += f"📂 ᴘʏʀᴏɢʀᴀᴍ ᴠᴇʀꜱɪᴏɴ: `{__pyro_version__}`\n"
-    reply_msg += f"📂 ᴜᴘᴛɪᴍᴇ: {uptime}"
     reply_msg += "\n📂 ꜱᴜᴘᴘᴏʀᴛ: [Click](https://t.me/TheGodfatherChat)\n📂 ᴄʜᴀɴɴᴇʟ: [Click](https://t.me/GodfatherUserBot)\n\n[**★彡[ᴘᴏᴡᴇʀᴇᴅ ʙʏ ɢᴏᴅꜰᴀᴛʜᴇʀ]彡★**](https://github.com/Team-TGN/Godfather)"
     photo = "https://telegra.ph/file/2c564b0cd45f8e39ef7e2.jpg"
     await m.delete()
