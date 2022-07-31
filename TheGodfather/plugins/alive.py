@@ -60,7 +60,7 @@ async def alive(app: Client, m):
     reply_msg += f"Python Version: `{__python_version__}`\n"
     reply_msg += f"Pyrogram Version: `{__pyro_version__}`\n"
     reply_msg += f"Uptime: {uptime}"
-    reply_msg += "Support: [Click](https://t.me/TheGodfatherChat)\nChannel: [Click](https://t.me/GodfatherUserBot)\n\n[Powered By Godfather](https://github.com/Team-TGN/Godfather)"
+    reply_msg += "\nSupport: [Click](https://t.me/TheGodfatherChat)\nChannel: [Click](https://t.me/GodfatherUserBot)\n\n[Powered By Godfather](https://github.com/Team-TGN/Godfather)"
     photo = "https://telegra.ph/file/2c564b0cd45f8e39ef7e2.jpg"
     await m.delete()
     if m.reply_to_message:
@@ -80,6 +80,7 @@ async def pingme(app: Client, message: Message):
     end = datetime.now()
     m_s = (end - start).microseconds / 1000
     photo = "https://telegra.ph/file/ceb9430fcb275c4f2a0d3.jpg"
+    await message.delete()
     if message.reply_to_message:
         await app.send_photo(
             message.chat.id,
