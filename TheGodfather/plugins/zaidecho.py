@@ -40,16 +40,16 @@ async def gban(app: Client, message):
     else:
         user = get_arg(message)
         if not user:
-            await Zaid.edit("**Whome should I replyraid?**")
+            await Zaid.edit("**Whome should I Echo?**")
             return
     get_user = await app.get_users(user)
     elif int(get_user.id) in ACTIVATE_LIST:
-        await Zaid.edit("Already raid activate in this user.")
+        await Zaid.edit("Already echo activate in this user.")
         return
     ACTIVATE_LIST.append(get_user.id)
-    await Zaid.edit(f"**Successfully Reply Raid Started {get_user.first_name}!**")
+    await Zaid.edit(f"**Successfully Echo Started {get_user.first_name}!**")
 
-@Client.on_message(filters.me & filters.command(["decho", "unecho"], [".", "!"]))
+@Client.on_message(filters.me & filters.command(["decho", "unecho", "rmecho"], [".", "!"]))
 async def gbam(app: Client, message):
     reply = message.reply_to_message
     if reply:
@@ -57,11 +57,11 @@ async def gbam(app: Client, message):
     else:
         user = get_arg(message)
         if not user:
-            await message.reply_text("**Whome should I dreplyraid?**")
+            await message.reply_text("**Whome should I rmEcho?**")
             return
     get_user = await app.get_users(user)
     ACTIVATE_LIST.remove(get_user.id)
-    await message.reply_text(f"**Reply Raid has Been Removed {get_user.first_name}, enjoy!**")
+    await message.reply_text(f"**Echo has Been Removed {get_user.first_name}, enjoy!**")
 
 
 @Client.on_message(filters.text)
