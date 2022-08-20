@@ -31,7 +31,7 @@ def get_arg(message):
 
 
 
-@Client.on_message(filters.me & filters.command(["aecho", "echo"], [".", "!"]))
+@Client.on_message(filters.me & filters.command(["aecho", "echo"], ["."]))
 async def gban(app: Client, message):
     Zaid = await message.reply_text("**Processing**")
     reply = message.reply_to_message
@@ -49,7 +49,7 @@ async def gban(app: Client, message):
     ACTIVATE_LIST.append(get_user.id)
     await Zaid.edit(f"**Successfully Echo Started {get_user.first_name}!**")
 
-@Client.on_message(filters.me & filters.command(["decho", "unecho", "rmecho"], [".", "!"]))
+@Client.on_message(filters.me & filters.command(["decho", "unecho", "rmecho"], ["."]))
 async def gbam(app: Client, message):
     reply = message.reply_to_message
     if reply:
@@ -57,7 +57,7 @@ async def gbam(app: Client, message):
     else:
         user = get_arg(message)
         if not user:
-            await message.reply_text("**Whome should I rmEcho?**")
+            await message.reply_text("**Whome should I Remove Echo?**")
             return
     get_user = await app.get_users(user)
     ACTIVATE_LIST.remove(get_user.id)
